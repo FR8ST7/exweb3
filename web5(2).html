@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body Mass Index (BMI) Calculator</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #eef1f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .bmi-calculator {
+            width: 600px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-header {
+            background-color: #009688;
+            color: white;
+            padding: 20px;
+        }
+
+        .calculator-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .calculator-header p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .calculator-body {
+            display: flex;
+            padding: 30px;
+            gap: 30px;
+        }
+
+        .input-section {
+            flex: 1;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .input-field {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .input-field span {
+            margin-left: 10px;
+            color: #888;
+            font-weight: bold;
+        }
+
+        .result-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f7f9fc;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .bmi-value {
+            font-size: 56px;
+            font-weight: 700;
+            color: #009688;
+        }
+
+        .bmi-status {
+            font-size: 18px;
+            color: #333;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+         
+        .bmi-status.underweight { color: #3498db; }
+        .bmi-status.normal { color: #2ecc71; }
+        .bmi-status.overweight { color: #f39c12; }
+        .bmi-status.obese { color: #e74c3c; }
+
+    </style>
+</head>
+<body>
+
+    <div class="bmi-calculator">
+        <div class="calculator-header">
+            <h1>Body mass index (BMI)</h1>
+            <p>A measure of body fat in adults</p>
+        </div>
+        <div class="calculator-body">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="weight">Weight</label>
+                    <div class="input-field">
+                        <input type="number" id="weight" placeholder="e.g., 80">
+                        <span>kg</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="height">Height</label>
+                    <div class="input-field">
+                        <input type="number" id="height" placeholder="e.g., 170">
+                        <span>cm</span>
+                    </div>
+                </div>
+            </div>
+            <div class="result-section">
+                <div id="bmi-value" class="bmi-value">--</div>
+                <div id="bmi-status" class="bmi-status">Enter details</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const weightInput = document.getElementById('weight');
+        const heightInput = document.getElementById('height');
+        const bmiValueDisplay = document.getElementById('bmi-value');
+        const bmiStatusDisplay = document.getElementById('bmi-status');
+
+        function calculateBMI() {
+            const weight = parseFloat(weightInput.value);
+            const heightCm = parseFloat(heightInput.value);
+
+            if (isNaN(weight) || isNaN(heightCm) || weight <= 0 || heightCm <= 0) {
+                bmiValueDisplay.textContent = '--';
+                bmiStatusDisplay.textContent = 'Enter details';
+                bmiStatusDisplay.className = 'bmi-status';
+                return;
+            }
+
+            const heightM = heightCm / 100;
+
+            const bmi = weight / (heightM * heightM);
+            
+            bmiValueDisplay.textContent = bmi.toFixed(1);
+
+            let status = '';
+            let statusClass = '';
+
+            if (bmi < 18) {
+                status = 'Underweight';
+                statusClass = 'underweight';
+            } else if (bmi > 18 && bmi < 25) {
+                status = 'Normal';
+                statusClass = 'normal';
+            } else if (bmi > 25 && bmi < 30) {
+                status = 'Overweight';
+                statusClass = 'overweight';
+            } else if (bmi > 30) {
+                status = 'Obese';
+                statusClass = 'obese';
+            } else {
+                status = 'On a borderline';
+                statusClass = 'normal';
+            }
+            
+            bmiStatusDisplay.textContent = status;
+            bmiStatusDisplay.className = `bmi-status ${statusClass}`;
+        }
+
+        weightInput.addEventListener('input', calculateBMI);
+        heightInput.addEventListener('input', calculateBMI);
+    </script>
+</body>
+</html>
